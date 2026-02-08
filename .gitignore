@@ -1,2 +1,5 @@
 .env
-pycache
+__pycache__
+uv.lock
+.venv
+gsheets_creds.json
