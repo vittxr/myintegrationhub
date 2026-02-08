@@ -17,3 +17,10 @@ In this project, I used Google Cloud service account credentials.
 1. Search for "Service Accounts" in the GCP search bar and open it
 2. Copy the service account email
 3. Open the spreadsheet you want and share it with the service account email (Editor access required)
+
+## Get your google sheets spreadsheet ID
+
+1. Access your spreadsheet.
+2. Copy the link 
+
+The link should be something like: "https://docs.google.com/spreadsheets/d/<ID>/edit?gid=0#gid=0". Copy the ID part of the link and place it in .env file.

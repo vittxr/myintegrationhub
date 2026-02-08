@@ -3,9 +3,9 @@ from app.config import config
 
 base_headers: dict[str, str] = {
     "Content-Type": "application/json",
-    "x-api-key": config.HABITICA_API_KEY,
-    "x-api-user": config.HABITICA_USER_ID,
-    "x-client": config.HABITICA_USER_ID + " - " + config.APP_NAME,
+    "x-api-key": config.HABITICA_API_KEY or "",
+    "x-api-user": config.HABITICA_USER_ID or "",
+    "x-client": (config.HABITICA_USER_ID or "") + " - " + config.APP_NAME,
 }
 
 
