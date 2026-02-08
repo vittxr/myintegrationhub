@@ -1,21 +1,21 @@
 import asyncio
 import json
 import typing
-from app.gsheets import append_sheet_data, get_sheet_first_row
+from app.gsheets import append_sheet_data, get_sheet_first_row, has_sheet_header_row
 from app.habitica import get_habitica_tasks, HabiticaTask
 from app.config import config
 
-HABITICA_DATE_COMPLETED_IDX = config.HABITICA_GSHEET_COLUMNS.index(
+DATE_COMPLETED_COL_IDX = config.HABITICA_GSHEET_COLUMNS.index(
     ("date_completed", "dateCompleted")
 )
+GSHEET_HEADER = [col_name for col_name, _ in config.HABITICA_GSHEET_COLUMNS]
 
 
 def build_habitica_data_for_gsheet(
     tasks: list[HabiticaTask],
     should_contain_header: bool = True,
 ) -> list[list[str | int | float]]:
-    header = [col_name for col_name, _ in config.HABITICA_GSHEET_COLUMNS]
-    rows: list[list[typing.Any]] = [header] if should_contain_header else []
+    rows: list[list[typing.Any]] = [GSHEET_HEADER] if should_contain_header else []
 
     for task in tasks:
         row: list[typing.Any] = []
@@ -37,19 +37,21 @@ def build_habitica_data_for_gsheet(
 async def main():
     first_gsheet_row = await get_sheet_first_row(sheet_name="db")
     date_completed = (
-        first_gsheet_row[HABITICA_DATE_COMPLETED_IDX]
+        first_gsheet_row[DATE_COMPLETED_COL_IDX]
         if first_gsheet_row is not None
         else None
     )
     completed_habitica_tasks = await get_habitica_tasks(type="completedTodos")
     completed_habitica_tasks_list = build_habitica_data_for_gsheet(
         tasks=completed_habitica_tasks,
-        should_contain_header=False if first_gsheet_row is not None else True,
+        should_contain_header=False
+        if await has_sheet_header_row(sheet_name="db", header_data=GSHEET_HEADER)
+        else True,
     )
     filtered_completed_habitica_tasks_list = [
         row
         for row in completed_habitica_tasks_list
-        if date_completed is None or row[HABITICA_DATE_COMPLETED_IDX] > date_completed
+        if date_completed is None or row[DATE_COMPLETED_COL_IDX] > date_completed
     ]
     print("first_gsheet_row", first_gsheet_row)
 

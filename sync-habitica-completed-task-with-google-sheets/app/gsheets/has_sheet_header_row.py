@@ -3,20 +3,19 @@ from app.config import config
 from app.gsheets._service import service
 
 
-async def has_sheet_header_row(sheet_name: str, skip_header: bool = True):
+async def has_sheet_header_row(sheet_name: str, header_data: list[str]) -> bool:
     """
-    Get the first non-empty row of a Google Sheet in constant time.
+    Check if the first row has the header row
     """
-    _range = "A2:Z2" if skip_header else "A1:Z1"
     res = (
         service.spreadsheets()
         .values()
         .get(
             spreadsheetId=config.GS_SPREADSHEET_ID,
-            range=f"'{sheet_name}'!{_range}",
+            range=f"'{sheet_name}'!A1:Z1",
         )
         .execute()
     )
-
-    values: list[typing.Any] = res.get("values")
-    return values[0] if values else None
+    values: list[typing.Any] = res.get("values") or [None]
+    res = values[0] == header_data
+    return res
