@@ -36,6 +36,9 @@ def build_habitica_data_for_gsheet(
 
 async def main():
     first_gsheet_row = await get_sheet_first_row(sheet_name="db")
+    _has_sheet_header_row = await has_sheet_header_row(
+        sheet_name="db", header_data=GSHEET_HEADER
+    )
     date_completed = (
         first_gsheet_row[DATE_COMPLETED_COL_IDX]
         if first_gsheet_row is not None
@@ -44,21 +47,17 @@ async def main():
     completed_habitica_tasks = await get_habitica_tasks(type="completedTodos")
     completed_habitica_tasks_list = build_habitica_data_for_gsheet(
         tasks=completed_habitica_tasks,
-        should_contain_header=False
-        if await has_sheet_header_row(sheet_name="db", header_data=GSHEET_HEADER)
-        else True,
+        should_contain_header=False if _has_sheet_header_row else True,
     )
     filtered_completed_habitica_tasks_list = [
         row
         for row in completed_habitica_tasks_list
         if date_completed is None or row[DATE_COMPLETED_COL_IDX] > date_completed
     ]
-    print("first_gsheet_row", first_gsheet_row)
-
     await append_sheet_data(
         sheet_name="db",
         values=filtered_completed_habitica_tasks_list,
-        start_range="A2",
+        start_range="A2" if _has_sheet_header_row else "A1",
     )
 
 
