@@ -12,7 +12,7 @@ You need to obtain Google and Habitica credentials. See the ./_docs folder for i
 2. Use this completion date to filter Habitica tasks, so only newly completed tasks are appended to the Google Sheet.
 3. If there are no tasks in the Google Sheet yet, all tasks will be appended.
 
-# REFS
+# Refs
 
 ## Habitica
 
