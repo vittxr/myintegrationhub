@@ -25,7 +25,7 @@ jobs:
         run: echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Create gcreds.json file from secret
-        run: echo "${{ secrets.GCREDS_JSON }}" > gsheets_creds.json
+        run: echo "${{ secrets.GSHEETS_CREDS }}" > gsheets_creds.json
 
       - name: Install dependencies
         run: uv sync
