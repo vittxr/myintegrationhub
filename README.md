@@ -12,6 +12,19 @@ You need to obtain Google and Habitica credentials. See the ./_docs folder for i
 2. Use this completion date to filter Habitica tasks, so only newly completed tasks are appended to the Google Sheet.
 3. If there are no tasks in the Google Sheet yet, all tasks will be appended.
 
+# Setup cronjob
+
+You can run this Python script manually using `python3 main.py` or `uv run python main.py`. Using UV is better because it uses the Python version installed inside the `.venv` folder, which is defined in the `.python-version` file.
+
+However, configuring a cron job is a much better option. You can set it up on your own PC or on a VM, but in this case I chose to use GitHub Actions. You can follow the guide in `_docs/github_actions_cronjob.md`.
+
+# Run manually 
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+1. uv sync
+2. uv run python main.py
+ 
 # Refs
 
 ## Habitica
